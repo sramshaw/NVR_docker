@@ -5,8 +5,8 @@ services:
     restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
     volumes:
-      - ./frigate/config:/config
-      - ./frigate/storage:/media/frigate
+      - /var/lib/NVR_docker/automation/frigate/config:/config
+      - /var/lib/NVR_docker/automation/frigate/storage:/media/frigate
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
         tmpfs:
@@ -14,4 +14,3 @@ services:
     ports:
       - "8971:8971"
       - "8554:8554" # RTSP feeds
-      
