@@ -13,6 +13,8 @@ cameras:
           roles:
             - detect
     detect:
-      enabled: true # <---- disable detection until you have a working camera feed
+      enabled: false # <---- disable detection until you have a working camera feed
       width: 640
       height: 480
+
+ 
