@@ -55,10 +55,19 @@ steps so far:
     - ``` cat /volume3/@iSCSI/LUN/iscsi_lun.conf ```
         shows 2 entries, one for good VM OS disk, one to be replaced with the HDD disk
 - step1: identify the guids to swap, edit script to do the swap swap.sh
-- step2: stop iSCSI service
-- step3: run swap.sh
+- step2: stop virtualisation and iSCSI service with
 ```
-#!/bin/bash
+synopkgctl stop Virtualization
+synopkgctl stop ScsiTarget
+```
+- step3: run swap.sh
+  - actual call
+```
+./swap.sh 2 1 3 2  # means to swap volume 2 1st disk and volume 3 2nd disk
+```
+  - content of swap.sh
+```
+#!/bin/bash  
 v1="$1"  #ex: 2 for /volume2
 l1="$2"  #ex: 1 for 1st SCSI disk
 v2="$3"  #ex: 3 for /volume3
@@ -83,4 +92,9 @@ mv $vol1/VDISK_BLUN/$guid1  $vol1/VDISK_BLUN/$guid2
 mv $vol2/VDISK_BLUN/$guid2  $vol2/VDISK_BLUN/$guid1
 find $vol1 -name "*.conf" -exec sed -i "s/${guid1}/${guid2}/" {} \;
 find $vol2 -name "*.conf" -exec sed -i "s/${guid2}/${guid1}/" {} \;
+```
+- step4: start virtualisation and iSCSI service with
+```
+synopkgctl start Virtualization
+synopkgctl start ScsiTarget
 ```
