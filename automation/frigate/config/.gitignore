@@ -4,3 +4,4 @@
 .v*
 *.db*
 model_cache/
+backup_*.yaml
