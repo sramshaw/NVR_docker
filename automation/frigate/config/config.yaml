@@ -16,4 +16,27 @@ cameras:
       enabled: true # <---- disable detection until you have a working camera feed
       width: 640
       height: 480
+record:
+  enabled: True
+  retain:
+    days: 14
+    mode: all
+  events:
+    retain:
+      default: 30
+      mode: motion
+
+detectors:
+  coral:
+    type: edgetpu
+    device: pci:0
+
+snapshots:
+  enabled: True
+  timestamp: True
+  retain:
+    default: 30
+    objects:
+      person: 365
+
 version: 0.14
