@@ -1,0 +1,19 @@
+mqtt:
+  enabled: false
+
+cameras:
+  doorbell_high_res:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://{FRIGATE_DOORBELL_USER}:{FRIGATE_DOORBELL_PASSWORD}@10.0.0.84:554
+          roles:
+            - record
+        - path: rtsp://{FRIGATE_DOORBELL_USER}:{FRIGATE_DOORBELL_PASSWORD}@10.0.0.84:554/h264Preview_01_sub
+          roles:
+            - detect
+    detect:
+      enabled: true # <---- disable detection until you have a working camera feed
+      width: 640
+      height: 480
+version: 0.14

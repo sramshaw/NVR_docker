@@ -1,0 +1,7 @@
+.e*
+.j*
+.t*
+.v*
+*.db*
+model_cache/
+backup_*.yaml
