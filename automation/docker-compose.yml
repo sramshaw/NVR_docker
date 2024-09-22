@@ -6,7 +6,7 @@ services:
     image: ghcr.io/blakeblackshear/frigate:stable
     volumes:
       - /var/lib/NVR_docker/automation/frigate/config:/config
-      - /var/lib/NVR_docker/automation/frigate/storage:/media/frigate
+      - /nvr_disk:/media/frigate
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
         tmpfs:
