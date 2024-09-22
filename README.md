@@ -134,7 +134,10 @@ steps so far:
         ```
         /dev/sdb: UUID="7e9beb18-9d09-4f12-9f72-38534df07fd0" BLOCK_SIZE="4096" TYPE="ext4"
         ```
-      - modify fstab as per instructed, with option 'nofail'
+      - modify fstab as per instructed, with option 'nofail' , adding new line:
+      ```
+      UUID=7e9beb18-9d09-4f12-9f72-38534df07fd0 /nvr_disk       ext4    discard,defaults,nofail 0 2
+      ```
       - unmount with
       ```
       umount /nvr_disk
