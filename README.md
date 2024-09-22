@@ -159,3 +159,37 @@ steps so far:
   rsync -av /var/lib/NVR_docker/automation/frigate/storage/ /nvr_disk/
   ```
 - step 8 : restart the automation stack
+
+## passthrough and use Coral TPU for accelerator
+
+### passing through 
+
+### install drivers
+
+instructions from https://coral.ai/docs/m2/get-started/#4-run-a-model-on-the-edge-tpu
+
+but there is an issue with adding Debian package repository
+fix the update https://github.com/google-coral/edgetpu/issues/550#issuecomment-1627908277
+
+stop after installing the drivers
+
+#### trying an example code but this does not end well 
+issue with python3 missing numpy
+
+sudo apt install python3-pip
+sudo apt install python3-numpy
+sudo apt install python3-pillow
+
+ends up in dead end
+The following packages have unmet dependencies:
+ python3-pycoral : Depends: python3-tflite-runtime (= 2.5.0.post1) but it is not going to be installed
+                   Depends: python3 (< 3.10) but 3.11.2-1+b1 is to be installed
+
+found a message that is about coral on frigate container
+https://github.com/google-coral/edgetpu/issues/771#issuecomment-1609875625
+
+#### passing device to container
+added section to the docker-compose.yml
+passing device /dev/apex_0
+
+created detector in frigate config
