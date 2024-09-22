@@ -4,6 +4,8 @@ services:
     container_name: frigate
     restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
+    env_file:
+      - frigate/frigate.env
     volumes:
       - /var/lib/NVR_docker/automation/frigate/config:/config
       - /nvr_disk:/media/frigate
