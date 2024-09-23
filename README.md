@@ -44,6 +44,16 @@ mainly followed the instructions:
     - note that the log contains the new password generated, which is needed to login into the frigate app
     - which is at https://nvr.lan:8971
 
+## Notes on configuration
+
+Configuration reference: 
+
+The unifi G3 camera advertises a **rtsps** protocol, which does not seem covered by the configuration as per 
+However I found here https://github.com/AlexxIT/WebRTC/blob/master/README.md#known-work-cameras to change 
+- from : rtsps://192.168.1.1:7441/XXXX?enableSrtp
+- to   : rtsp://192.168.1.1:7447/XXXX?enableSrtp
+
+
 ## Move the storage to the suveillance disk
 
 As the VM runs on a small SSD, use a dedicated HDD to store the video. There is no value to the videos in case of the HDD failure, just change it, hence no worries about the content of the vDisk

@@ -3,7 +3,7 @@ mqtt:
 
 cameras:
   doorbell_high_res:
-    enabled: true
+    enabled: True
     ffmpeg:
       inputs:
         - path: rtsp://{FRIGATE_DOORBELL_USER}:{FRIGATE_DOORBELL_PASSWORD}@10.0.0.84:554
@@ -13,9 +13,23 @@ cameras:
           roles:
             - detect
     detect:
-      enabled: true # <---- disable detection until you have a working camera feed
+      enabled: True # <---- disable detection until you have a working camera feed
       width: 640
       height: 480
+  g3_bedroom:
+    enabled: True
+    ffmpeg:
+      inputs:
+        - path: rtsp://192.168.1.1:7447/YYYY?enableSrtp
+          roles:
+            - record
+        - path: rtsp://192.168.1.1:7447/XXXX?enableSrtp
+          roles:
+            - detect
+    detect:
+      enabled: True # <---- disable detection until you have a working camera feed
+      width: 1024
+      height: 576
 record:
   enabled: True
   retain:
