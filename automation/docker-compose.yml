@@ -18,3 +18,16 @@ services:
     ports:
       - "8971:8971"
       - "8554:8554" # RTSP feeds
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - "./mosquitto/config:/mosquitto/config"
+      - "./mosquitto/data:/mosquitto/data"
+      - "./mosquitto/log:/mosquitto/log"
+    environment:
+      - TZ=America/Chicago
+    user: "${PUID}:${PGID}"
