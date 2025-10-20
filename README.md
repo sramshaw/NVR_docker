@@ -16,7 +16,7 @@ When the installation steps are over and it is time to start the containers, in 
 mainly followed the instructions:
 - setup debian 12 on a VM in Synology VMM as per https://docs.frigate.video/guides/getting_started/
   - used storage created on the SSD volume (volume 3)
-  - name: NvrVM
+  - name: frigate_VM
   - host name in laptop hosts list: nvr.lan
   - non root user: papa
   - note that usermod is available at /usr/sbin/usermod
