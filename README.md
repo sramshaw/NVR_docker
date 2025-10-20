@@ -27,7 +27,7 @@ mainly followed the instructions:
   - setup passwordless ssh from laptop to nvr.lan
   - (setup passwordless ssh from laptop to admin.lan)
 - ?? setup VM to have its own identity ??
-- setup git for work with https://github.com/sramshaw/NVR_docker.git
+- setup git on VM for work with https://github.com/sramshaw/NVR_docker.git
   - install git
   - clone  https://github.com/sramshaw/NVR_docker.git in the folder /var/lib/
   - setup global user.name  and user.email
@@ -42,7 +42,7 @@ mainly followed the instructions:
     gh auth setup-git
     ```
     - note that when trying to auth via a console, the step trying to open a browser fails, you can then go and do it manually in a browser and use the code provided by the cli process
-- setup docker
+- setup docker on VM
   - install docker as per https://docs.docker.com/engine/install/debian/
   - setup user papa as part of docker group
     ```
@@ -52,6 +52,18 @@ mainly followed the instructions:
   - test with a simple `docker ps`
 - setup vscode to edit git folder /home/papa/NVR_docker in Remote SSH to papa@nvr.lan
 - setup vscode extension for docker
+- install PCIe Coral TPU drivers (apex)
+  - see https://gweb-coral-full.uc.r.appspot.com/docs/m2/get-started/#2a-on-linux
+    ```
+    echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get install gasket-dkms libedgetpu1-std
+    sudo sh -c "echo 'SUBSYSTEM==\"apex\", MODE=\"0660\", GROUP=\"apex\"' >> /etc/udev/rules.d/65-apex.rules"
+    sudo groupadd apex
+    sudo adduser $USER apex
+    ```
+  - reboot the VM
 - First launch of the 'stack', aka docker compose
   - in the explorer view of vscode, right click on docker-compose.yml , click 'compose up'
   - quickly in the docker extension view, find the 'automation' stack , and right click to see the logs
