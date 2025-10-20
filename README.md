@@ -28,14 +28,21 @@ mainly followed the instructions:
   - (setup passwordless ssh from laptop to admin.lan)
 - ?? setup VM to have its own identity ??
 - setup git for work with https://github.com/sramshaw/NVR_docker.git
-  - install github authentication using commands at https://cli.github.com/manual/gh_auth
-    ``` apt install gh
+  - install git
+  - install docker as per https://docs.docker.com/engine/install/debian/
+  - clone  https://github.com/sramshaw/NVR_docker.git in the folder /var/lib/
+  - setup global user.name  and user.email
+    ```
+    git config --global user.name "Your Name"
+    git config --global user.email "your.email@example.com"
+    ```
+  - ?? install github authentication using commands at https://cli.github.com/manual/gh_auth
+    ```
+    apt install gh
     gh auth login  # follow the questions, use mechanism with web authentication
     gh auth setup-git
     ```
     - note that when trying to auth via a console, the step trying to open a browser fails, you can then go and do it manually in a browser and use the code provided by the cli process
-  - setup global user.name  and user.email
-  - clone  https://github.com/sramshaw/NVR_docker.git in the folder /var/lib/
 - setup vscode to edit git folder /var/lib/NVR_docker in Remote SSH to papa@nvr.lan
 - setup vscode extension for docker
 - First launch of the 'stack', aka docker compose
