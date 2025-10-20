@@ -29,7 +29,6 @@ mainly followed the instructions:
 - ?? setup VM to have its own identity ??
 - setup git for work with https://github.com/sramshaw/NVR_docker.git
   - install git
-  - install docker as per https://docs.docker.com/engine/install/debian/
   - clone  https://github.com/sramshaw/NVR_docker.git in the folder /var/lib/
   - setup global user.name  and user.email
     ```
@@ -43,7 +42,15 @@ mainly followed the instructions:
     gh auth setup-git
     ```
     - note that when trying to auth via a console, the step trying to open a browser fails, you can then go and do it manually in a browser and use the code provided by the cli process
-- setup vscode to edit git folder /var/lib/NVR_docker in Remote SSH to papa@nvr.lan
+- setup docker
+  - install docker as per https://docs.docker.com/engine/install/debian/
+  - setup user papa as part of docker group
+    ```
+    sudo moduser -aG docker papa
+    ```
+  - then exit all ssh (if already in vscode , exit all) , for the new change to take effect
+  - test with a simple `docker ps`
+- setup vscode to edit git folder /home/papa/NVR_docker in Remote SSH to papa@nvr.lan
 - setup vscode extension for docker
 - First launch of the 'stack', aka docker compose
   - in the explorer view of vscode, right click on docker-compose.yml , click 'compose up'
