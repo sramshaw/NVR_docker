@@ -63,7 +63,81 @@ mainly followed the instructions:
     sudo groupadd apex
     sudo adduser $USER apex
     ```
-  - reboot the VM
+- create an iSCSI initiator (client) for an iSCSI remote disc (here a Synology LUN on a  NVR disk /volume2)
+  - install the driver, see https://reintech.io/blog/setting-up-iscsi-target-debian-12
+    ```shell
+    sudo apt install open-iscsi
+    ```
+  -  discover the initiator (this debian machine) 's IQN
+    ```shell
+    sudo cat /etc/iscsi/initiatorname.iscsi
+    ```
+  -  discover the iSCSI target it will aim at based on IP address - step needed anytime there is a change on the target (aka here: NAS remote iSCSI drive)
+    ```shell
+    sudo iscsiadm -m discovery -t sendtargets -p <TARGET IP>
+    # make sure there is only one entry discovered with IPv4 address, if IPv6 comes too, see below
+    ```
+  - map the remote drive (iSCSI target) to /nvr_disk
+    - the iSCSI target on Synology was setup to only allow the initiator above, and with CHAP authentication
+    - edit initiator config
+    ```shell
+    sudo nano /etc/iscsi/iscsid.conf
+    ```
+    - uncomment line : `node.session.auth.authmethod = CHAP`
+    - add line: `node.session.auth.username = <target_provided_username>`
+    - add line: `node.session.auth.password = <target_provided_password>`
+    - restart initiator ??
+    ```shell
+    ### sudo systemctl restart open-iscsi
+    ```
+    - connect via cli:
+    ```shell
+    # make sure to do the discover part again if you change the CHAP settings on the target, it will be taken in account below
+    # and note that the node command uses te CHAP creds setup in iscsid.conf
+    sudo iscsiadm -m node --targetname iqn.2000-01.com.synology:TRON.default-target.9330fcd89aa --portal 10.0.0.183 --login
+    # disconnect using -u instead of --login
+    # notice how a new entry (sdb in my case) is available with: ls /dev |grep sd
+    # make sure in NAS LUN permission settings, if not 'Accept All' but 'custom' , to add your initiator's host with Read/Write (not default of no access!!!)
+    # I was not successful using the checksum for header or data in Synology SAN -> iSCSI settings,
+    # but successful using CHAP credentials
+    ```
+    - check that open-iscsi service can now work properly, it should restart in less than 5s with no error, based on the last 'discovery'
+    ```shell
+    sudo systemctl restart open-iscsi
+    
+    # note that if there is issue at boot where open-iscsi is exiting, check that it is not trying to reach 2 discovered targets, one IPv4 and one IPv6 for the same target
+    # I had to disable IPV6 on the LAN (Synology->Control panel->Network -> Network interface -> pick yours -> edit , set IPv6 to OFF
+    # after that the 'discover' was only finding IPv4 , and the service started to work, boot time improved and mounting was successful
+    ```
+    - format the iSCSI drive if needed (I use NTFS)
+      ```shell
+      sudo apt install ntfs-3g #was already installed on debian 12
+      #find your device
+      ls -l /dev/disk/by-path/
+      # ex: result:  /dev/disk/by-path/ip-SOME-IP:3260-iscsi-iqn.2000-01.com.synology:NNNN.default-target.XXXX-lun-1 --> ../../sdb  = /dev/sdb
+      # then create partition with 'parted'
+      sudo parted /dev/sdb
+      # then type the following except '(parted) '
+      (parted) mklabel gpt
+      (parted) mkpart primary ntfs 0% 100%
+      (parted) quit
+      # now you have a partition like /dev/sdb1
+      lsblk # will show sdb1
+      # fast format, then mount
+      sudo mkfs.ntfs -f -L "frigate_data" /dev/sdb1
+      sudo mkdir -p /nvr_disk
+      sudo mount -t ntfs-3g /dev/sdb1 /nvr_disk
+      # get UUID for persistent mount:
+      sudo blkid /dev/sdb1
+      # add this line in fstab, replace [UUID] and using no double quotes apparently
+      # UUID=[UUID] /nvr_disk ntfs-3g defaults,_netdev 0 0
+      sudo nano /etc/fstab
+      reboot
+      # check that the mount works
+      mount |grep nvr  #should give you a line
+      ```
+      
+- reboot the VM
 - First launch of the 'stack', aka docker compose
   - in the explorer view of vscode, right click on docker-compose.yml , click 'compose up'
   - quickly in the docker extension view, find the 'automation' stack , and right click to see the logs
