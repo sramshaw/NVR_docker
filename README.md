@@ -167,8 +167,8 @@ This is done via remapping of the VM side (left) folder of the bind:
 
 steps so far:
 - it seems there is no direct way to achieve this in VVM
-- there is a trick I detailed in a separate repo: https://github.com/sramshaw/synology_vdisks_swap by swapping iSCSI LUN definitions between 2 VMs
-- you will end up with the HDD 's vDIsk mounted as /nvr_disk
+- use iSCSI LUN to give access to NVR storage to frigate
+- you will end up with the HDD 's iSCSI disk mounted as /nvr_disk
 
 - move the container binding to the new drive and move contents
   - shutdown automation stack
