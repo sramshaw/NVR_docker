@@ -7,7 +7,7 @@ services:
     env_file:
       - frigate/frigate.env
     volumes:
-      - /var/lib/NVR_docker/automation/frigate/config:/config
+      - ./frigate/config:/config
       - /nvr_disk:/media/frigate
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
