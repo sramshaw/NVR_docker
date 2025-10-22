@@ -3,13 +3,15 @@ mqtt:
 
 cameras:
   doorbell_high_res:
-    enabled: True
+    enabled: true
     ffmpeg:
       inputs:
-        - path: rtsp://{FRIGATE_DOORBELL_USER}:{FRIGATE_DOORBELL_PASSWORD}@10.0.0.84:554
+        - path: 
+            rtsp://{FRIGATE_DOORBELL_USER}:{FRIGATE_DOORBELL_PASSWORD}@{FRIGATE_DOORBELL_IP}:554
           roles:
             - record
-        - path: rtsp://{FRIGATE_DOORBELL_USER}:{FRIGATE_DOORBELL_PASSWORD}@10.0.0.84:554/h264Preview_01_sub
+        - path: 
+            rtsp://{FRIGATE_DOORBELL_USER}:{FRIGATE_DOORBELL_PASSWORD}@{FRIGATE_DOORBELL_IP}:554/h264Preview_01_sub
           roles:
             - detect
     detect:
@@ -20,10 +22,10 @@ cameras:
     enabled: True
     ffmpeg:
       inputs:
-        - path: rtsp://192.168.1.1:7447/YYYY?enableSrtp
+        - path: rtsp://{CAMERA1_IP}:7447/{CAMERA1_WIDE}
           roles:
             - record
-        - path: rtsp://192.168.1.1:7447/XXXX?enableSrtp
+        - path: rtsp://{CAMERA1_IP}:7447/{CAMERA1_SMALL}
           roles:
             - detect
     detect:
@@ -31,26 +33,29 @@ cameras:
       width: 1024
       height: 576
 record:
-  enabled: True
+  enabled: true
   retain:
     days: 14
     mode: all
-  events:
+  alerts:
     retain:
-      default: 30
-      mode: motion
-
+      days: 30
+  detections:
+    retain:
+      days: 30
 detectors:
   coral:
     type: edgetpu
     device: pci:0
 
 snapshots:
-  enabled: True
-  timestamp: True
+  enabled: true
+  timestamp: true
   retain:
     default: 30
     objects:
       person: 365
 
-version: 0.14
+version: 0.16-0
+detect:
+  enabled: true
